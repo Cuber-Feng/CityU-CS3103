@@ -53,3 +53,46 @@
 - 给资源设定顺序
 
 - 比如有L1&L2, 规定必须先申请L1, 再申请L2
+
+## 👌Deadlock Avoidance 主动避免死锁
+- 需要额外的信息来储存 how resources are to be requested
+- 每个 process declares 它需要的最大资源数量
+- Deadlock-avoidance algorithm 确保永远没有 circular-wait condition
+- 资源分配状态 Resource-allocation state：
+  - 可用资源的数量和已分配资源的数量(available and allocated)
+  - 进程的最大需求
+### Safe State
+- 系统是否“安全” = 是否有一个“顺序”，能让所有进程一个个完成并释放资源。
+- 不安全不代表一定死锁
+- Deadlock avoidance: ensure a system never enters an unsafe state
+### Deadlock Avoidance Algorithms
+#### Resource-Allocation Graph (每本书只有一份)
+- 两种节点
+  - process
+  - resource type
+- 两种边(有向)
+  - request edge: 从进程指向资源
+  - assignment edge: 从资源指向进程
+  - claim edge: 从进程指向资源(进程可能请求某个资源, 虚线)
+- Transitions in between edges
+  - claim edge --> request edge: when a process requests resource
+  - request edge --> assignment edge: when resource allocated to process
+  - assignment edge --> claim edge: when resource released by process
+- **没有圈就是安全状态**(有向圈)
+  - 如果一个 request edge 变成 assignment edge 后不会形成新的圈, 则这个 request 可以通过
+#### Banker’s Algorithm (每本书有多份)
+- 前提
+  - 每个进程必须事先声明它对每种资源类型的**最大需求量**
+  - 当进程请求资源时，可能要等待
+  - 当进程获得它需要的所有资源后，必须在**有限时间**内释放资源
+
+- 术语
+
+|名称 |	含义|
+|--|--|
+|Available	|系统当前可用的各类资源数量|
+|Max	|每个进程最大可能需要的资源量|
+|Allocation	|当前已分配给每个进程的资源量|
+|Need	|每个进程还需要的资源量（Need = Max - Allocation）|
+
+具体过程比较复杂, 看这个吧: [Banker's Algorithm explained](https://youtu.be/T0FXvTHcYi4?si=wVo7jk7OCICI_dRA)
